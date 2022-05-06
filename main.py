@@ -79,6 +79,6 @@ corrMatrix = df.corr()
 sn.heatmap(corrMatrix, annot=True)
 plt.show()
 
-df.drop(columns=['work_type_children', 'Residence_type_Rural', 'ever_married'])
+df.drop(columns=['work_type_children', 'Residence_type_Rural', 'ever_married'], inplace=True)
 
 # work_type_children, Residence_type_Rural, ever_married

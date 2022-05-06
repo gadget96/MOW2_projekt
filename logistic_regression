@@ -10,7 +10,7 @@ import seaborn as sns
 df = get_dataframe()
 
 stroke_df = df[['stroke']].copy()
-df.drop(columns=['stroke'])
+df.drop(columns=['stroke'], inplace=True)
 
 X_train, X_test, y_train, y_test = train_test_split(df, stroke_df, test_size=0.33, random_state=42)
 
