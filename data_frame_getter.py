@@ -16,5 +16,5 @@ def get_dataframe() -> pd.DataFrame:
     dataframe = pd.get_dummies(dataframe, columns=['work_type', 'Residence_type', 'smoking_status'])
     columns_to_transofrm = ['age', 'avg_glucose_level', 'bmi']
     dataframe[columns_to_transofrm] = StandardScaler().fit_transform(dataframe[columns_to_transofrm])
-    dataframe.drop(columns=['work_type_children', 'Residence_type_Rural', 'ever_married'])
+    dataframe.drop(columns=['work_type_children', 'Residence_type_Rural', 'ever_married'], inplace=True)
     return dataframe
