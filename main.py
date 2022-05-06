@@ -1,7 +1,6 @@
 import pandas as pd
 from matplotlib import pyplot as plt
 import os
-import numpy as np
 import seaborn as sn
 from sklearn import preprocessing
 from sklearn.preprocessing import StandardScaler
@@ -31,6 +30,9 @@ def boxplots(file_names, dataframe):  # j/w
         plt.savefig(head + '_boxplots.png')
         plt.close()
 
+
+df = pd.read_csv('healthcare-dataset-stroke-data.csv')  # wczytywanie danych z pliku za pomocą pandas dataframe
+df = df.fillna(df.mean())
 
 df = pd.read_csv('healthcare-dataset-stroke-data.csv')  # wczytywanie danych z pliku za pomocą pandas dataframe
 df = df.fillna(df.mean())  # podkładanie średniej za wszystkie wartości NaN w zbiorze
@@ -76,3 +78,7 @@ df[columns_to_transofrm] = StandardScaler().fit_transform(df[columns_to_transofr
 corrMatrix = df.corr()
 sn.heatmap(corrMatrix, annot=True)
 plt.show()
+
+df.drop(columns=['work_type_children', 'Residence_type_Rural', 'ever_married'])
+
+# work_type_children, Residence_type_Rural, ever_married
