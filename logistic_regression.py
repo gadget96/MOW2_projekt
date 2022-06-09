@@ -14,7 +14,9 @@ df.drop(columns=['stroke'], inplace=True)
 
 X_train, X_test, y_train, y_test = train_test_split(df, stroke_df, test_size=0.33, random_state=42)
 
-model = LogisticRegression()
+model = LogisticRegression(solver='lbfgs',
+                                     multi_class='multinomial',
+                                     max_iter=200)
 
 model.fit(X_train, y_train)
 
@@ -38,5 +40,27 @@ plt.xlabel('Predicted label')
 print("Accuracy:", metrics.accuracy_score(y_test, y_pred))
 print("Precision:", metrics.precision_score(y_test, y_pred))
 print("Recall:", metrics.recall_score(y_test, y_pred))
+plt.savefig('logistic_regression_confusion_matrix.png')
+plt.close()
 
-plt.show()
+lr_probs = model.predict_proba(X_test)
+lr_probs = lr_probs[:, 1]
+ns_probs = [0 for _ in range(len(lr_probs))]
+ns_auc = metrics.roc_auc_score(y_test, ns_probs)
+lr_auc = metrics.roc_auc_score(y_test, lr_probs)
+# summarize scores
+print('Logistic: ROC AUC=%.3f' % (lr_auc))
+# calculate roc curves
+ns_fpr, ns_tpr, _ = metrics.roc_curve(y_test, ns_probs)
+lr_fpr, lr_tpr, _ = metrics.roc_curve(y_test, lr_probs)
+# plot the roc curve for the model
+plt.plot(ns_fpr, ns_tpr, linestyle='--', label='No Skill')
+plt.plot(lr_fpr, lr_tpr, marker='.', label='Logistic')
+# axis labels
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+# show the legend
+plt.legend()
+# show the plot
+plt.savefig('logistic_regression_ROC.png')
+plt.close()

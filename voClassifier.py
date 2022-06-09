@@ -1,25 +1,35 @@
-from data_frame_getter import get_dataframe
-from sklearn.model_selection import train_test_split
-
+from sklearn.ensemble import VotingClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.neural_network import MLPClassifier
+from sklearn.model_selection import train_test_split
+from data_frame_getter import get_dataframe
+import matplotlib.pyplot as plt
+import seaborn as sns
 from sklearn import metrics
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
+
 
 df = get_dataframe()
 
 stroke_df = df[['stroke']].copy()
 df.drop(columns=['stroke'], inplace=True)
 
+# train_test_split
 X_train, X_test, y_train, y_test = train_test_split(df, stroke_df, test_size=0.33)
 
-model = MLPClassifier()
+# group / ensemble of models
+estimator = []
 
-model.fit(X_train, y_train)
+estimator.append(('MLP', MLPClassifier()))
+estimator.append(('DTC', DecisionTreeClassifier(criterion="gini", min_samples_leaf=5, max_depth=6)))
+estimator.append(('LR', LogisticRegression(solver='lbfgs', multi_class='multinomial', max_iter=200)))
 
-y_pred = model.predict(X_test)
+# Voting Classifier with hard voting
+vot_hard = VotingClassifier(estimators=estimator, voting='soft')
+vot_hard.fit(X_train, y_train)
+y_pred = vot_hard.predict(X_test)
 
 cnf_matrix = metrics.confusion_matrix(y_test, y_pred)
 
@@ -39,14 +49,12 @@ plt.xlabel('Predicted label')
 print("Accuracy:", metrics.accuracy_score(y_test, y_pred))
 print("Precision:", metrics.precision_score(y_test, y_pred))
 print("Recall:", metrics.recall_score(y_test, y_pred))
-
-plt.savefig('MLP_confussion_matrix.png')
+plt.savefig('voting_classifier_confusion_matrix.png')
 plt.close()
 
-lr_probs = model.predict_proba(X_test)
+lr_probs = vot_hard.predict_proba(X_test)
 lr_probs = lr_probs[:, 1]
 ns_probs = [0 for _ in range(len(lr_probs))]
-ns_auc = metrics.roc_auc_score(y_test, ns_probs)
 lr_auc = metrics.roc_auc_score(y_test, lr_probs)
 # summarize scores
 print('Logistic: ROC AUC=%.3f' % (lr_auc))
@@ -62,5 +70,5 @@ plt.ylabel('True Positive Rate')
 # show the legend
 plt.legend()
 # show the plot
-plt.savefig('MLP_ROC.png')
+plt.savefig('voting_classifier_ROC.png')
 plt.close()
