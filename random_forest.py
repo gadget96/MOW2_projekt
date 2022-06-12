@@ -54,6 +54,8 @@ plt.tight_layout()
 plt.title("Confusion matrix", y=1.1)
 plt.ylabel("Actual label")
 plt.xlabel("Predicted label")
+plt.savefig("LogisticRegression_Smote_confusionmatrix.png")
+plt.close()
 
 print("Accuracy:", metrics.accuracy_score(y_test, y_pred))
 print("Precision:", metrics.precision_score(y_test, y_pred))
@@ -78,7 +80,7 @@ plt.xlabel("False Positive Rate")
 plt.ylabel("True Positive Rate")
 # show the legend
 plt.legend()
-plt.savefig("LogisticRegression_Smote.png")
+plt.savefig("LogisticRegression_Smote_ROC.png")
 plt.close()
 
 # Zwykle algorytmmy średnio sobie radzą z daymi z niezbalansowanuych zbiorów.
@@ -113,6 +115,8 @@ plt.tight_layout()
 plt.title("Confusion matrix", y=1.1)
 plt.ylabel("Actual label")
 plt.xlabel("Predicted label")
+plt.savefig("RandomForest_confusionmatrix.png")
+plt.close()
 
 print("Accuracy:", metrics.accuracy_score(y_test, y_pred))
 print("Precision:", metrics.precision_score(y_test, y_pred))
@@ -137,5 +141,5 @@ plt.xlabel("False Positive Rate")
 plt.ylabel("True Positive Rate")
 # show the legend
 plt.legend()
-plt.savefig("RandomForest.png")
+plt.savefig("RandomForest_ROC.png")
 plt.close()

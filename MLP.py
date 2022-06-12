@@ -13,7 +13,7 @@ df = get_dataframe()
 stroke_df = df[['stroke']].copy()
 df.drop(columns=['stroke'], inplace=True)
 
-X_train, X_test, y_train, y_test = train_test_split(df, stroke_df, test_size=0.33)
+X_train, X_test, y_train, y_test = train_test_split(df, stroke_df, test_size=0.3, random_state=65)
 
 model = MLPClassifier()
 
@@ -40,7 +40,7 @@ print("Accuracy:", metrics.accuracy_score(y_test, y_pred))
 print("Precision:", metrics.precision_score(y_test, y_pred))
 print("Recall:", metrics.recall_score(y_test, y_pred))
 
-plt.savefig('MLP_confussion_matrix.png')
+plt.savefig('MLP_confusion_matrix.png')
 plt.close()
 
 lr_probs = model.predict_proba(X_test)

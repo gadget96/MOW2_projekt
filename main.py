@@ -31,7 +31,7 @@ def boxplots(file_names, dataframe):  # j/w
         plt.close()
 
 
-df = pd.read_csv('../numpy/healthcare-dataset-stroke-data.csv')  # wczytywanie danych z pliku za pomocą pandas dataframe
+df = pd.read_csv('healthcare-dataset-stroke-data.csv')  # wczytywanie danych z pliku za pomocą pandas dataframe
 df = df.fillna(df.mean())
 
 df = pd.read_csv('healthcare-dataset-stroke-data.csv')  # wczytywanie danych z pliku za pomocą pandas dataframe
